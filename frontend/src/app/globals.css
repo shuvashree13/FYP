@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-lightBlue text-gray-900;
+  }
+}
+
+@layer components {
+  /* Primary Button - Dark Blue */
+  .btn-primary {
+    @apply bg-primary text-white px-8 py-3 rounded-full hover:bg-primary-dark transition-colors font-medium;
+  }
+  
+  /* Outline Button - White with border */
+  .btn-outline {
+    @apply border-2 border-white text-white px-8 py-3 rounded-full hover:bg-white hover:text-primary transition-colors font-medium;
+  }
+  
+  /* Login Button - Navbar */
+  .btn-login {
+    @apply bg-primary text-white px-6 py-2 rounded-full hover:bg-primary-dark transition-colors;
+  }
+  
+  /* Input Fields */
+  .input-field {
+    @apply w-full px-4 py-3 bg-white border-b-2 border-gray-300 focus:border-primary outline-none transition-all placeholder-gray-400;
+  }
+  
+  /* Dark Input Fields (for login/signup) */
+  .input-dark {
+    @apply w-full px-4 py-3 bg-transparent border-b-2 border-gray-400 text-white placeholder-gray-300 focus:border-white outline-none transition-all;
+  }
+  
+  /* Card - White rounded */
+  .card {
+    @apply bg-white rounded-2xl shadow-lg p-6;
+  }
+  
+  /* Dashboard Card */
+  .stat-card {
+    @apply bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow;
+  }
+  
+  /* Navigation Link */
+  .nav-link {
+    @apply text-primary hover:text-primary-dark transition-colors font-medium;
+  }
+  
+  /* Sidebar Link */
+  .sidebar-link {
+    @apply px-6 py-4 hover:bg-gray-100 transition-colors cursor-pointer rounded-lg;
+  }
+  
+  .sidebar-link-active {
+    @apply px-6 py-4 bg-gray-100 font-semibold rounded-lg;
+  }
+}
