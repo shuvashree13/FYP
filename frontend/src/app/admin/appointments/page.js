@@ -7,6 +7,7 @@ import api from '../../../lib/api';
 import AdminLayout from '../../../components/AdminLayout';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
+import ICONS from '../../../constants/icons';
 
 export default function AdminAppointmentsPage() {
   const { user, loading } = useAuth();
@@ -42,13 +43,13 @@ export default function AdminAppointmentsPage() {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'pending':
-        return <span className="badge badge-warning">⏳ Pending</span>;
+        return <span className="badge badge-warning">{ICONS.PENDING} Pending</span>;
       case 'confirmed':
-        return <span className="badge badge-info">✓ Confirmed</span>;
+        return <span className="badge badge-info">{ICONS.CHECK} Confirmed</span>;
       case 'completed':
-        return <span className="badge badge-success">✓ Completed</span>;
+        return <span className="badge badge-success">{ICONS.CHECK} Completed</span>;
       case 'cancelled':
-        return <span className="badge badge-danger">✗ Cancelled</span>;
+        return <span className="badge badge-danger">{ICONS.CROSS} Cancelled</span>;
       default:
         return <span className="badge">{status}</span>;
     }

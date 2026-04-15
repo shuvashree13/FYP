@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -42,18 +43,37 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const { data } = await api.post('/auth/register', userData);
+      
+      // Check if user is a doctor and not approved
+      if (data.data.role === 'doctor' && !data.data.isApproved) {
+        // EXPLICITLY clear everything for unapproved doctors
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setUser(null); // Clear user state
+        
+        toast.success('Registration successful! Your account is pending admin approval. You will be notified once approved.');
+        
+        // Redirect to landing page with login button visible
+        setTimeout(() => {
+          router.push('/');
+        }, 100);
+        
+        return { success: true, needsApproval: true };
+      }
+      
+      // For patients and admins, proceed with normal registration
       localStorage.setItem('token', data.data.token);
       localStorage.setItem('user', JSON.stringify(data.data));
       setUser(data.data);
       toast.success(data.message);
       
-      if (data.data.role === 'admin') {
-        router.push('/admin/dashboard');
+      // Role-based redirect after registration
+      if (data.data.role === 'patient') {
+        router.push('/'); // Patients go to landing page
+      } else if (data.data.role === 'admin') {
+        window.location.href = '/admin/dashboard'; // Force full page reload
       } else if (data.data.role === 'doctor') {
-        toast('Your account is pending approval from admin', { icon: 'ℹ️' });;
-        router.push('/');
-      } else {
-        router.push('/patient/dashboard');
+        window.location.href = '/doctor/dashboard'; // Force full page reload
       }
       
       return { success: true };
@@ -67,21 +87,55 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const { data } = await api.post('/auth/login', credentials);
+      
+      // ===== DEBUGGING START =====
+      console.log('===== LOGIN DEBUG =====');
+      console.log('Full response data:', data);
+      console.log('User data:', data.data);
+      console.log('User role:', data.data.role);
+      console.log('isApproved value:', data.data.isApproved);
+      console.log('isApproved type:', typeof data.data.isApproved);
+      console.log('Is doctor?', data.data.role === 'doctor');
+      console.log('Not approved?', !data.data.isApproved);
+      console.log('Will block login?', data.data.role === 'doctor' && !data.data.isApproved);
+      console.log('=====================');
+      // ===== DEBUGGING END =====
+      
+      // Check if user is a doctor and not approved
+      if (data.data.role === 'doctor' && !data.data.isApproved) {
+        console.log('❌ BLOCKING LOGIN: Doctor not approved');
+        
+        // EXPLICITLY clear everything
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setUser(null);
+        
+        toast.error('Your account is pending admin approval. Please wait for verification.');
+        return { success: false, message: 'Account pending approval' };
+      }
+      
+      console.log('✅ ALLOWING LOGIN: Proceeding with login');
+      
       localStorage.setItem('token', data.data.token);
       localStorage.setItem('user', JSON.stringify(data.data));
       setUser(data.data);
       toast.success(data.message);
       
-      if (data.data.role === 'admin') {
-        router.push('/admin/dashboard');
+      // Role-based redirect after login
+      if (data.data.role === 'patient') {
+        console.log('Redirecting to: /');
+        router.push('/'); // Patients go to landing page
+      } else if (data.data.role === 'admin') {
+        console.log('Redirecting to: /admin/dashboard');
+        window.location.href = '/admin/dashboard'; // Force full page reload
       } else if (data.data.role === 'doctor') {
-        router.push('/doctor/dashboard');
-      } else {
-        router.push('/patient/dashboard');
+        console.log('Redirecting to: /doctor/dashboard');
+        window.location.href = '/doctor/dashboard'; // Force full page reload
       }
       
       return { success: true };
     } catch (error) {
+      console.error('❌ LOGIN ERROR:', error);
       const message = error.response?.data?.message || 'Login failed';
       toast.error(message);
       return { success: false, message };

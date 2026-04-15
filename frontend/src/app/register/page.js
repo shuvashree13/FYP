@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../context/AuthContext';
+import ICONS from '../../constants/icons';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -65,7 +66,11 @@ export default function RegisterPage() {
       {/* Left Side - Image */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary to-primary-light items-center justify-center p-12">
         <div className="text-white text-center">
-          <div className="text-9xl mb-8">🏥</div>
+          <img 
+            src="/images/logo.png" 
+            alt="Care Connection Logo" 
+            className="w-64 h-64 object-contain mx-auto mb-8"
+          />
           <h2 className="text-4xl font-bold mb-4">CareConnection</h2>
           <p className="text-xl">Join us for better healthcare</p>
         </div>
@@ -179,7 +184,7 @@ export default function RegisterPage() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary"
               >
-                {showPassword ? '👁️' : '🔒'}
+                {showPassword ? 'Hide' : ICONS.LOCK}
               </button>
             </div>
 
@@ -200,7 +205,7 @@ export default function RegisterPage() {
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-primary"
               >
-                {showConfirmPassword ? '👁️' : '🔒'}
+                {showConfirmPassword ? 'Hide' : ICONS.LOCK}
               </button>
             </div>
 
@@ -213,23 +218,6 @@ export default function RegisterPage() {
               {loading ? 'Creating Account...' : 'SignUp'}
             </button>
           </form>
-
-          {/* Divider */}
-          <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 border-t border-gray-300"></div>
-            <span className="text-gray-500">Or</span>
-            <div className="flex-1 border-t border-gray-300"></div>
-          </div>
-
-          {/* Social Login Buttons */}
-          <div className="flex gap-4 justify-center">
-            <button className="w-14 h-14 rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-primary transition-colors">
-              <span className="text-2xl">G</span>
-            </button>
-            <button className="w-14 h-14 rounded-full border-2 border-gray-300 flex items-center justify-center hover:border-primary transition-colors">
-              <span className="text-2xl">f</span>
-            </button>
-          </div>
 
           {/* Login Link */}
           <p className="text-center mt-6 text-gray-600">

@@ -5,6 +5,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import api from '../../../lib/api';
 import AdminLayout from '../../../components/AdminLayout';
+import ICONS from '../../../constants/icons';
 
 export default function AdminDashboard() {
   const { user, loading } = useAuth();
@@ -61,39 +62,39 @@ export default function AdminDashboard() {
           {/* Appointments Card */}
           <div className="stat-card">
             <div className="flex items-center justify-between mb-4">
-              <div className="text-4xl">📅</div>
+              <div className="text-4xl">{ICONS.CALENDAR}</div>
             </div>
             <h3 className="text-3xl font-bold text-gray-900 mb-2">
               {stats?.appointments.total || 0}
             </h3>
             <p className="text-gray-600">No of Appointments</p>
             <div className="mt-3 text-sm text-gray-500">
-              <span className="text-yellow-600">⏳ {stats?.appointments.pending || 0} Pending</span>
+              <span className="text-yellow-600">{ICONS.PENDING} {stats?.appointments.pending || 0} Pending</span>
               {' • '}
-              <span className="text-green-600">✓ {stats?.appointments.completed || 0} Completed</span>
+              <span className="text-green-600">{ICONS.CHECK} {stats?.appointments.completed || 0} Completed</span>
             </div>
           </div>
 
           {/* Doctors Card */}
           <div className="stat-card">
             <div className="flex items-center justify-between mb-4">
-              <div className="text-4xl">👨‍⚕️</div>
+              <div className="text-4xl">{ICONS.DOCTOR}</div>
             </div>
             <h3 className="text-3xl font-bold text-gray-900 mb-2">
               {stats?.doctors.total || 0}
             </h3>
             <p className="text-gray-600">No of Doctors</p>
             <div className="mt-3 text-sm text-gray-500">
-              <span className="text-green-600">✓ {stats?.doctors.approved || 0} Approved</span>
+              <span className="text-green-600">{ICONS.CHECK} {stats?.doctors.approved || 0} Approved</span>
               {' • '}
-              <span className="text-orange-600">⏳ {stats?.doctors.pending || 0} Pending</span>
+              <span className="text-orange-600">{ICONS.PENDING} {stats?.doctors.pending || 0} Pending</span>
             </div>
           </div>
 
           {/* Patients Card */}
           <div className="stat-card">
             <div className="flex items-center justify-between mb-4">
-              <div className="text-4xl">👥</div>
+              <div className="text-4xl">{ICONS.PATIENT}</div>
             </div>
             <h3 className="text-3xl font-bold text-gray-900 mb-2">
               {stats?.patients.total || 0}
@@ -108,7 +109,7 @@ export default function AdminDashboard() {
           {stats?.doctors.pending > 0 && (
             <div className="card">
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                ⚠️ Action Required
+                {ICONS.INFO} Action Required
               </h3>
               <p className="text-gray-600 mb-4">
                 You have {stats.doctors.pending} doctor{stats.doctors.pending > 1 ? 's' : ''} waiting for approval
@@ -125,7 +126,7 @@ export default function AdminDashboard() {
           {/* Recent Activity */}
           <div className="card">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
-              📊 System Overview
+              {ICONS.LIST} System Overview
             </h3>
             <div className="space-y-3">
               <div className="flex justify-between items-center">

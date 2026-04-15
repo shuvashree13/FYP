@@ -50,8 +50,8 @@ exports.createAppointment = async (req, res) => {
     });
 
     const populatedAppointment = await Appointment.findById(appointment._id)
-      .populate('patient', 'name email phone')
-      .populate('doctor', 'name email specialization consultationFee');
+      .populate('patient', 'name email phone avatar')
+      .populate('doctor', 'name email specialization consultationFee avatar');
 
     res.status(201).json({
       success: true,
@@ -87,8 +87,8 @@ exports.getAppointments = async (req, res) => {
     }
 
     const appointments = await Appointment.find(query)
-      .populate('patient', 'name email phone age gender')
-      .populate('doctor', 'name email specialization consultationFee')
+      .populate('patient', 'name email phone age gender bloodGroup avatar')
+      .populate('doctor', 'name email specialization consultationFee avatar')
       .sort({ date: -1, createdAt: -1 });
 
     res.status(200).json({
@@ -110,8 +110,8 @@ exports.getAppointments = async (req, res) => {
 exports.getAppointment = async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.id)
-      .populate('patient', 'name email phone age gender bloodGroup address')
-      .populate('doctor', 'name email specialization qualification consultationFee');
+      .populate('patient', 'name email phone age gender bloodGroup address avatar')
+      .populate('doctor', 'name email specialization qualification experience consultationFee phone email avatar');
 
     if (!appointment) {
       return res.status(404).json({
@@ -174,8 +174,8 @@ exports.updateAppointmentStatus = async (req, res) => {
     await appointment.save();
 
     const updatedAppointment = await Appointment.findById(appointment._id)
-      .populate('patient', 'name email phone')
-      .populate('doctor', 'name email specialization');
+      .populate('patient', 'name email phone avatar')
+      .populate('doctor', 'name email specialization avatar');
 
     res.status(200).json({
       success: true,

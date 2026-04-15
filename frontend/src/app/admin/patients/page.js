@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import api from '../../../lib/api';
 import AdminLayout from '../../../components/AdminLayout';
 import toast from 'react-hot-toast';
+import ICONS from '../../../constants/icons';
 
 export default function AdminPatientsPage() {
   const { user, loading } = useAuth();
@@ -104,7 +105,7 @@ export default function AdminPatientsPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary w-80"
             />
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">{ICONS.SEARCH}</span>
           </div>
         </div>
 

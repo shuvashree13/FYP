@@ -42,11 +42,12 @@ exports.register = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        isApproved: user.isApproved,  
         token
       }
     });
   } catch (error) {
-    console.error('Register error:', error); // 👈 added
+    console.error('Register error:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -93,12 +94,13 @@ exports.login = async (req, res) => {
       });
     }
 
-    if (user.role === 'doctor' && !user.isApproved) {
-      return res.status(401).json({
-        success: false,
-        message: 'Your account is pending approval from admin'
-      });
-    }
+    // Let frontend handle this check
+    // if (user.role === 'doctor' && !user.isApproved) {
+    //   return res.status(401).json({
+    //     success: false,
+    //     message: 'Your account is pending approval from admin'
+    //   });
+    // }
 
     const token = generateToken(user._id);
 
@@ -110,11 +112,14 @@ exports.login = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        isApproved: user.isApproved,  
+        avatar: user.avatar,           
+        phone: user.phone,             
         token
       }
     });
   } catch (error) {
-    console.error('Login error:', error); // 👈 added
+    console.error('Login error:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -134,7 +139,7 @@ exports.getMe = async (req, res) => {
       data: user
     });
   } catch (error) {
-    console.error('GetMe error:', error); // 👈 added
+    console.error('GetMe error:', error);
     res.status(500).json({
       success: false,
       message: error.message
@@ -149,9 +154,16 @@ exports.updateProfile = async (req, res) => {
   try {
     const fieldsToUpdate = {
       name: req.body.name,
-      phone: req.body.phone,
-      avatar: req.body.avatar
+      phone: req.body.phone
     };
+
+    // Only update avatar if it's provided and not null
+    if (req.body.avatar && req.body.avatar !== null && req.body.avatar !== 'null') {
+      fieldsToUpdate.avatar = req.body.avatar;
+      console.log('[AVATAR] Avatar being saved - Length:', req.body.avatar.length);
+    } else {
+      console.log('[AVATAR] No avatar in request');
+    }
 
     if (req.user.role === 'patient') {
       fieldsToUpdate.age = req.body.age;
@@ -168,14 +180,18 @@ exports.updateProfile = async (req, res) => {
       fieldsToUpdate.availability = req.body.availability;
     }
 
+    console.log('[PROFILE] Updating user with fields:', Object.keys(fieldsToUpdate));
+
     const user = await User.findByIdAndUpdate(
       req.user._id,
       fieldsToUpdate,
       {
-        new: true,
+        returnDocument: 'after',
         runValidators: true
       }
     );
+
+    console.log('[PROFILE] User updated. Has avatar:', !!user.avatar);
 
     res.status(200).json({
       success: true,
@@ -183,7 +199,7 @@ exports.updateProfile = async (req, res) => {
       data: user
     });
   } catch (error) {
-    console.error('UpdateProfile error:', error); // 👈 added
+    console.error('UpdateProfile error:', error);
     res.status(500).json({
       success: false,
       message: error.message

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import api from '../../../lib/api';
 import AdminLayout from '../../../components/AdminLayout';
 import toast from 'react-hot-toast';
+import ICONS from '../../../constants/icons';
 
 export default function AdminDoctorsPage() {
   const { user, loading } = useAuth();
@@ -199,15 +200,15 @@ export default function AdminDoctorsPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-gray-900">
-                          {doctor.consultationFee ? `$${doctor.consultationFee}` : 'Not set'}
+                          {doctor.consultationFee || 'Not set'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex flex-col gap-1">
                           {doctor.isApproved ? (
-                            <span className="badge badge-success">✓ Approved</span>
+                            <span className="badge badge-success">{ICONS.CHECK} Approved</span>
                           ) : (
-                            <span className="badge badge-warning">⏳ Pending</span>
+                            <span className="badge badge-warning">{ICONS.PENDING} Pending</span>
                           )}
                           {doctor.isActive ? (
                             <span className="badge badge-info">Active</span>
