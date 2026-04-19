@@ -113,7 +113,7 @@ export default function Home() {
               a hassle free check-up.
             </p>
             <Link 
-              href={user ? "/patient/book-appointment" : "/register"} 
+              href={user ? "/doctors" : "/register"} 
               className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary hover:text-white transition-all duration-300 hover:shadow-lg"
             >
               Book an Appointment

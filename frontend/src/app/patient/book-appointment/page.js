@@ -155,7 +155,7 @@ export default function BookAppointmentPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
         <Link 
-          href="/patient/doctors" 
+          href="/doctors" 
           className="inline-flex items-center gap-2 text-gray-700 hover:text-primary mb-8 text-lg"
         >
           <span>←</span>
